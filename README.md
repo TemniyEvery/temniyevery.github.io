@@ -1,1 +1,0 @@
-# temniyevery.github.io

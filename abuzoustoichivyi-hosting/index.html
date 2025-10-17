@@ -409,4 +409,20 @@
     </div>
   </div>
 </aside>
-</div> <script> // подсчет времени чтения и генерация оглавления с плавной прокруткой document.addEventListener('DOMContentLoaded', function(){ const article = document.querySelector('article') if(article){ const text = article.innerText || '' const words = text.trim().split(/\s+/).length const minutes = Math.max(1, Math.round(words / 220)) const el = document.querySelector('.readtime') if(el) el.textContent = minutes + ' мин чтения' } // плавная прокрутка для ссылок оглавления document.querySelectorAll('a[href^="#"]').forEach(function(anchor){ anchor.addEventListener('click', function(e){ const href = this.getAttribute('href') if(href.length > 1){ e.preventDefault() const target = document.querySelector(href) if(target){ window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 24, behavior: 'smooth' }) } } }) }) // подсветка активной секции в оглавлении const headings = Array.from(document.querySelectorAll('article h2, article h3')) const tocLinks = Array.from(document.querySelectorAll('#toc-nav a')) function onScroll(){ let index = -1 for(let i=0;i<headings.length;i++){ const rect = headings[i].getBoundingClientRect() if(rect.top - 120 <= 0) index = i } tocLinks.forEach(link => link.style.fontWeight = '400') if(index >= 0){ const id = headings[index].id const active = document.querySelector('#toc-nav a[href="#' + id + '"]') if(active) active.style.fontWeight = '700' } } document.addEventListener('scroll', onScroll, {passive:true}) onScroll() }) </script> </body> </html>
+</div> <script> // подсчет времени чтения и генерация оглавления с плавной прокруткой document.addEventListener('DOMContentLoaded', function(){ const article = document.querySelector('article') if(article){ const text = article.innerText || '' const words = text.trim().split(/\s+/).length const minutes = Math.max(1, Math.round(words / 220)) const el = document.querySelector('.readtime') if(el) el.textContent = minutes + ' мин чтения' } // плавная прокрутка для ссылок оглавления document.querySelectorAll('a[href^="#"]').forEach(function(anchor){ anchor.addEventListener('click', function(e){ const href = this.getAttribute('href') if(href.length > 1){ e.preventDefault() const target = document.querySelector(href) if(target){ window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 24, behavior: 'smooth' }) } } }) }) // подсветка активной секции в оглавлении const headings = Array.from(document.querySelectorAll('article h2, article h3')) const tocLinks = Array.from(document.querySelectorAll('#toc-nav a')) function onScroll(){ let index = -1 for(let i=0;i<headings.length;i++){ const rect = headings[i].getBoundingClientRect() if(rect.top - 120 <= 0) index = i } tocLinks.forEach(link => link.style.fontWeight = '400') if(index >= 0){ const id = headings[index].id const active = document.querySelector('#toc-nav a[href="#' + id + '"]') if(active) active.style.fontWeight = '700' } } document.addEventListener('scroll', onScroll, {passive:true}) onScroll() }) </script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+    ym(103140254, 'init', {webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/103140254" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+ </body> </html>

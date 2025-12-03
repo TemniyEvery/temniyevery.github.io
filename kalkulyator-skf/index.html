@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор СКФ (GFR): Cockcroft-Gault, MDRD, CKD-EPI — Онлайн расчет скорости клубочковой фильтрации</title>
+    <meta name="description" content="Бесплатный медицинский онлайн калькулятор скорости клубочковой фильтрации (СКФ). Расчет по формулам CKD-EPI, MDRD и Кокрофта-Голта. Таблица стадий ХБП.">
+    <meta name="keywords" content="калькулятор СКФ, скорость клубочковой фильтрации, формула CKD-EPI, формула MDRD, формула Кокрофта-Голта, расчет ХБП, стадии почек, креатинин">
+    <meta name="author" content="Medical Calc">
+    
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="Калькулятор СКФ: Точный расчет функции почек">
+    <meta property="og:description" content="Быстрый расчет СКФ по трем основным формулам. Классификация стадий ХБП.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+
+    <!-- Schema.org Microdata -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Калькулятор СКФ (GFR)",
+      "description": "Инструмент для расчета скорости клубочковой фильтрации по формулам CKD-EPI, MDRD и Кокрофта-Голта.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any",
+      "featureList": "Расчет CKD-EPI, Расчет MDRD, Расчет Кокрофта-Голта, Таблица ХБП"
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #0056b3;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Calculator Card Styles */
+        .calculator-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            -moz-appearance: textfield; /* Remove arrows */
+        }
+        
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .radio-label input {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-calc {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 4px 6px rgba(0,123,255,0.2);
+        }
+
+        .btn-calc:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-calc:active {
+            transform: translateY(1px);
+        }
+
+        /* Results Section */
+        #results {
+            margin-top: 30px;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .result-title {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .unit {
+            font-size: 0.9rem;
+            font-weight: normal;
+            color: #666;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #777;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .container { padding: 15px; }
+            .calculator-card { padding: 20px; }
+            th, td { font-size: 0.9rem; padding: 10px; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .stage-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .bg-green { background-color: var(--success-color); }
+        .bg-yellow { background-color: #fd7e14; } /* Orange */
+        .bg-red { background-color: var(--danger-color); }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Калькулятор СКФ</h1>
+            <p>Расчет скорости клубочковой фильтрации для оценки функции почек.</p>
+        </header>
+
+        <main>
+            <!-- Калькулятор -->
+            <section class="calculator-card" id="calc-section">
+                <div class="form-group">
+                    <label>Пол</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="gender" value="male" checked> Мужской
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="gender" value="female"> Женский
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Возраст (лет)</label>
+                    <input type="number" id="age" inputmode="numeric" placeholder="Например: 45">
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Вес (кг)</label>
+                    <input type="number" id="weight" inputmode="decimal" placeholder="Например: 75">
+                    <small style="color:#666; font-size: 0.8em;">Нужен для формулы Кокрофта-Голта</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="creatinine">Креатинин сыворотки (мкмоль/л)</label>
+                    <input type="number" id="creatinine" inputmode="decimal" placeholder="Например: 95">
+                </div>
+
+                <div class="form-group">
+                    <label>Раса</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="race" value="non-black" checked> Европейская / Азиатская
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="race" value="black"> Негроидная
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn-calc" onclick="calculateGFR()">Рассчитать</button>
+
+                <!-- Результаты -->
+                <div id="results">
+                    <h3 style="margin-bottom: 15px;">Результаты расчета:</h3>
+                    
+                    <div class="result-box">
+                        <div class="result-title">CKD-EPI (Рекомендуемая)</div>
+                        <div class="result-value" id="res-ckd-epi">-- <span class="unit">мл/мин/1.73м²</span></div>
+                        <div id="stage-ckd-epi"></div>
+                    </div>
+
+                    <div class="result-box">
+                        <div class="result-title">MDRD</div>
+                        <div class="result-value" id="res-mdrd">-- <span class="unit">мл/мин/1.73м²</span></div>
+                    </div>
+
+                    <div class="result-box">
+                        <div class="result-title">Кокрофта-Голта (Клиренс креатинина)</div>
+                        <div class="result-value" id="res-cg">-- <span class="unit">мл/мин</span></div>
+                    </div>
+                    
+                    <p style="font-size: 0.85rem; color: #666; margin-top: 10px;">
+                        *Внимание: Результаты носят информационный характер. Для постановки диагноза обратитесь к врачу.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Описание формул -->
+            <article>
+                <h2>Описание используемых формул</h2>
+                
+                <section>
+                    <h3>Уравнение CKD-EPI</h3>
+                    <p>Формула <strong>CKD-EPI (Chronic Kidney Disease Epidemiology Collaboration)</strong> считается наиболее точным методом оценки СКФ на сегодняшний день. Она лучше работает для пациентов с нормальной или незначительно сниженной функцией почек (СКФ > 60 мл/мин), чем формула MDRD.</p>
+                </section>
+
+                <section>
+                    <h3>Формула MDRD</h3>
+                    <p>Формула <strong>MDRD (Modification of Diet in Renal Disease)</strong> широко использовалась до появления CKD-EPI. Она хорошо оценивает функцию почек при значительном снижении СКФ, но может занижать показатели у здоровых людей. Не требует знания веса пациента.</p>
+                </section>
+
+                <section>
+                    <h3>Формула Кокрофта-Голта</h3>
+                    <p>Одна из старейших формул (1976 г.). Она рассчитывает не СКФ, а <strong>клиренс креатинина</strong>. Часто используется для коррекции дозировок лекарственных препаратов. Главное отличие — учет веса пациента, что важно при нестандартной мышечной массе.</p>
+                </section>
+            </article>
+
+            <!-- Таблица стадий -->
+            <section>
+                <h2>Классификация ХБП по стадиям (K/DOQI)</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Стадия</th>
+                                <th>Описание</th>
+                                <th>СКФ (мл/мин)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Поражение почек с нормальной СКФ</td>
+                                <td>≥ 90</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Поражение почек с легким снижением СКФ</td>
+                                <td>60 – 89</td>
+                            </tr>
+                            <tr>
+                                <td>3а</td>
+                                <td>Умеренное снижение СКФ</td>
+                                <td>45 – 59</td>
+                            </tr>
+                            <tr>
+                                <td>3б</td>
+                                <td>Существенное снижение СКФ</td>
+                                <td>30 – 44</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Тяжелое снижение СКФ</td>
+                                <td>15 – 29</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Терминальная почечная недостаточность</td>
+                                <td>&lt; 15</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2023 Medical Calc. Все права защищены. Информация не является медицинской консультацией.</p>
+        </footer>
+    </div>
+
+    <script>
+        function calculateGFR() {
+            // Получение данных
+            const age = parseFloat(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const creatUmol = parseFloat(document.getElementById('creatinine').value);
+            
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const race = document.querySelector('input[name="race"]:checked').value;
+
+            // Валидация
+            if (!age || !creatUmol) {
+                alert("Пожалуйста, введите возраст и уровень креатинина.");
+                return;
+            }
+
+            const isFemale = gender === 'female';
+            const isBlack = race === 'black';
+
+            // Конвертация креатинина: мкмоль/л -> мг/дл
+            const creatMgDl = creatUmol / 88.4;
+
+            // --- 1. Формула Кокрофта-Голта ---
+            // ((140 - возраст) * вес) / (72 * креатинин_мг_дл) * (0.85 для женщин)
+            let cgResult = 0;
+            if (weight) {
+                cgResult = ((140 - age) * weight) / (72 * creatMgDl);
+                if (isFemale) cgResult *= 0.85;
+            }
+
+            // --- 2. Формула MDRD ---
+            // 175 * (Cr)^-1.154 * (Age)^-0.203 * (0.742 if female) * (1.212 if black)
+            let mdrdResult = 175 * Math.pow(creatMgDl, -1.154) * Math.pow(age, -0.203);
+            if (isFemale) mdrdResult *= 0.742;
+            if (isBlack) mdrdResult *= 1.212;
+
+            // --- 3. Формула CKD-EPI (2009) ---
+            let k, alpha, A;
+            
+            if (isFemale) {
+                k = 0.7;
+                alpha = -0.329;
+                A = 144;
+            } else { // Male
+                k = 0.9;
+                alpha = -0.411;
+                A = 141;
+            }
+
+            // Логика min/max для CKD-EPI
+            const crRatio = creatMgDl / k;
+            const minRatio = Math.min(crRatio, 1);
+            const maxRatio = Math.max(crRatio, 1);
+
+            let ckdEpiResult = A * Math.pow(minRatio, alpha) * Math.pow(maxRatio, -1.209) * Math.pow(0.993, age);
+            
+            if (isFemale) ckdEpiResult *= 1.018; // В оригинальной формуле 2009 используется коэффициент для женщин в базе (144), но часто указывается отдельно 1.018 к базе 141. Здесь используем классический подход A=144/141.
+            // Примечание: Чаще используется запись: 141 * min(Scr/k, 1)^alpha * max(Scr/k, 1)^-1.209 * 0.993^Age * 1.018 (if female) * 1.159 (if black)
+            // Пересчитаем по "классической единой" формуле для точности:
+            
+            ckdEpiResult = 141 * Math.pow(Math.min(creatMgDl/k, 1), alpha) * Math.pow(Math.max(creatMgDl/k, 1), -1.209) * Math.pow(0.993, age);
+            if (isFemale) ckdEpiResult *= 1.018;
+            if (isBlack) ckdEpiResult *= 1.159;
+
+
+            // --- Вывод результатов ---
+            document.getElementById('results').style.display = 'block';
+            
+            // CKD-EPI
+            const epiVal = ckdEpiResult.toFixed(1);
+            document.getElementById('res-ckd-epi').innerHTML = `${epiVal} <span class="unit">мл/мин/1.73м²</span>`;
+            
+            // Определение стадии для CKD-EPI
+            const stageElement = document.getElementById('stage-ckd-epi');
+            let stageText = '';
+            let stageClass = '';
+
+            if (ckdEpiResult >= 90) { stageText = 'Стадия 1 (Норма)'; stageClass = 'bg-green'; }
+            else if (ckdEpiResult >= 60) { stageText = 'Стадия 2 (Легкое снижение)'; stageClass = 'bg-green'; }
+            else if (ckdEpiResult >= 45) { stageText = 'Стадия 3а (Умеренное снижение)'; stageClass = 'bg-yellow'; }
+            else if (ckdEpiResult >= 30) { stageText = 'Стадия 3б (Существенное снижение)'; stageClass = 'bg-yellow'; }
+            else if (ckdEpiResult >= 15) { stageText = 'Стадия 4 (Тяжелое снижение)'; stageClass = 'bg-red'; }
+            else { stageText = 'Стадия 5 (Терминальная ХПН)'; stageClass = 'bg-red'; }
+
+            stageElement.innerHTML = `<span class="stage-badge ${stageClass}">${stageText}</span>`;
+
+            // MDRD
+            document.getElementById('res-mdrd').innerHTML = `${mdrdResult.toFixed(1)} <span class="unit">мл/мин/1.73м²</span>`;
+
+            // Cockcroft-Gault
+            if (weight) {
+                document.getElementById('res-cg').innerHTML = `${cgResult.toFixed(1)} <span class="unit">мл/мин</span>`;
+            } else {
+                document.getElementById('res-cg').innerHTML = `Укажите вес <span class="unit">для расчета</span>`;
+            }
+
+            // Прокрутка к результатам на мобильном
+            if (window.innerWidth < 600) {
+                document.getElementById('results').scrollIntoView({behavior: 'smooth'});
+            }
+        }
+    </script>
+	
+	<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+    ym(103140254, 'init', {webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/103140254" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</body>
+</html>
